@@ -1,17 +1,12 @@
 #include "ships.hpp"
 #include "ocean.hpp"
-#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
 
-const std::string Ship::BATTLESHIP_TYPE = "battleship";
-const std::string Ship::CRUISER_TYPE = "cruiser";
-const std::string Ship::DESTROYER_TYPE = "destroyer";
-const std::string Ship::SUBMARINE_TYPE = "submarine";
-
-Ship::Ship(int l) : bowRow(-1), bowColumn(-1), length(l), horizontal(false) {
-  hit.resize(l, false);
+Ship::Ship(int length)
+    : bowRow(-1), bowColumn(-1), length(length), bowHorizontal(false) {
+  hit.resize(length, false);
 }
 
 bool Ship::isSunk() const {
@@ -19,25 +14,23 @@ bool Ship::isSunk() const {
 }
 
 bool Ship::isValidSpot(int row, int column, Ocean &ocean) const {
-
-  auto rowLimit = ocean.getShipArray().size() - 1;
-  auto colLimit = ocean.getShipArray()[0].size() - 1;
-
-  return !(row < 0 || column < 0 || row > rowLimit || column > colLimit);
+  return !(row < 0 || column < 0 || row > ocean.getMaxRow() - 1 ||
+           column > ocean.getMaxColumn() - 1);
 }
 
 bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
-
+  // Check all adjacent cells (8 directions)
   for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
     for (int colOffset = -1; colOffset <= 1; colOffset++) {
       int curRow = row + rowOffset;
       int curColumn = column + colOffset;
 
+      // Skip the check for the original position or out-of-bound spots
       if ((rowOffset == 0 && colOffset == 0) ||
           !(isValidSpot(curRow, curColumn, ocean)))
         continue;
 
-      if (ocean.getShipArray()[curRow][curColumn]->getShipType() != "empty") {
+      if (ocean.getShip(curRow, curColumn)->getShipType() != Ship::TYPE_EMPTY) {
         return false;
       }
     }
@@ -53,7 +46,7 @@ bool Ship::okToPlaceShipAt(int row, int column, bool horizontal,
     int curColumn = horizontal ? (column - i) : column;
 
     if (!(isValidSpot(curRow, curColumn, ocean)) ||
-        (ocean.getShipArray()[curRow][curColumn]->getShipType() != "empty"))
+        (ocean.getShip(curRow, curColumn)->getShipType() != Ship::TYPE_EMPTY))
       return false;
 
     if (!isAdjacentEmpty(curRow, curColumn, ocean))
@@ -63,16 +56,13 @@ bool Ship::okToPlaceShipAt(int row, int column, bool horizontal,
 }
 
 void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
-  setBowRow(row);
-  setBowColumn(column);
-  setHorizontal(horizontal);
+  bowRow = row;
+  bowColumn = column;
+  bowHorizontal = horizontal;
 
   for (int i = 0; i < getLength(); i++) {
-    if (horizontal) {
-      ocean.getShipArray()[row][column - i] = shared_from_this();
-    } else {
-      ocean.getShipArray()[row - i][column] = shared_from_this();
-    }
+    ocean.getShip(horizontal ? row : row - i,
+                  horizontal ? column - i : column) = shared_from_this();
   }
 }
 
@@ -82,31 +72,31 @@ bool Ship::shootAt(int row, int column) {
     return false;
   }
 
-  int curRow = getBowRow();
-  int curCol = getBowColumn();
+  int curRow = bowRow;
+  int curCol = bowColumn;
 
-  for (int i = 0; i < getLength(); i++) {
+  for (int i = 0; i < length; i++) {
     if (curRow == row && curCol == column) {
-      setHit(i, true);
+      hit[i] = true;
       return true;
     }
-    isHorizontal() ? curCol-- : curRow--;
+    bowHorizontal ? curCol-- : curRow--;
   }
   return false;
 }
 
-std::ostream &operator<<(std::ostream &os, const Ship &s) {
-  if (s.getShipType() == "empty") {
-    s.isSunk() ? os << "-" : os << ".";
+std::ostream &operator<<(std::ostream &os, const Ship &ship) {
+  if (ship.getShipType() == Ship::TYPE_EMPTY) {
+    ship.isSunk() ? os << "-" : os << ".";
   } else {
-    s.isSunk() ? os << "s" : os << "x";
+    ship.isSunk() ? os << "s" : os << "x";
   }
   return os;
 }
 
 bool EmptySea::shootAt(int row, int column) {
-  if (getBowRow() == row && getBowColumn() == column) {
-    setHit(0, true);
+  if (bowRow == row && bowColumn == column) {
+    hit[0] = true;
   }
   return false;
 }

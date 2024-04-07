@@ -6,39 +6,41 @@
 #include <vector>
 
 class Ocean;
-
 class Ship : public std::enable_shared_from_this<Ship> {
 
 protected:
+  std::vector<bool> hit;
+  int bowRow, bowColumn, length;
+  bool bowHorizontal;
+
+public:
   static constexpr int BATTLESHIP_SIZE = 4;
   static constexpr int CRUISER_SIZE = 3;
   static constexpr int DESTROYER_SIZE = 2;
   static constexpr int SUBMARINE_SIZE = 1;
-  static const std::string BATTLESHIP_TYPE;
-  static const std::string CRUISER_TYPE;
-  static const std::string DESTROYER_TYPE;
-  static const std::string SUBMARINE_TYPE;
+  // C++17, inline variable
+  static inline std::vector<int> shipSizes = {BATTLESHIP_SIZE, CRUISER_SIZE,
+                                              DESTROYER_SIZE, SUBMARINE_SIZE};
+  static inline const std::string TYPE_BATTLESHIP = "Battleship";
+  static inline const std::string TYPE_CRUISER = "Cruiser";
+  static inline const std::string TYPE_DESTROYER = "Destroyer";
+  static inline const std::string TYPE_SUBMARINE = "Submarine";
+  static inline const std::string TYPE_EMPTY = "EmptySea";
 
-private:
-  int bowRow, bowColumn, length;
-  bool horizontal;
-  std::vector<bool> hit;
-
-public:
-  Ship(int l);
+  Ship(int length);
 
   int getBowRow() const { return bowRow; }
   int getBowColumn() const { return bowColumn; }
   int getLength() const { return length; }
   const std::vector<bool> &getHit() const { return hit; }
+
+  // Pure virtual, no implementation in the base class
+  // Must be overridden by all derived classes (unless a derived class is also
+  // abstract)
   virtual std::string getShipType() const = 0;
-  void setBowRow(int r) { bowRow = r; }
-  void setBowColumn(int c) { bowColumn = c; }
-  void setHorizontal(bool h) { horizontal = h; }
-  void setHit(int r, bool b) { hit[r] = b; }
 
   bool isSunk() const;
-  bool isHorizontal() const { return horizontal; }
+  bool isHorizontal() const { return bowHorizontal; }
   bool isValidSpot(int row, int column, Ocean &ocean) const;
   bool isAdjacentEmpty(int row, int column, Ocean &ocean) const;
   bool okToPlaceShipAt(int row, int column, bool horizontal,
@@ -46,7 +48,7 @@ public:
   void placeShipAt(int row, int column, bool horizontal, Ocean &ocean);
   virtual bool shootAt(int row, int column);
 
-  friend std::ostream &operator<<(std::ostream &os, const Ship &s);
+  friend std::ostream &operator<<(std::ostream &os, const Ship &ship);
   virtual ~Ship() = default;
 };
 
@@ -54,37 +56,40 @@ class Battleship : public Ship {
 
 public:
   Battleship() : Ship(BATTLESHIP_SIZE) {}
-  std::string getShipType() const { return BATTLESHIP_TYPE; }
+  std::string getShipType() const { return TYPE_BATTLESHIP; }
 };
 
 class Cruiser : public Ship {
 
 public:
   Cruiser() : Ship(CRUISER_SIZE) {}
-  std::string getShipType() const { return CRUISER_TYPE; }
+  std::string getShipType() const { return TYPE_CRUISER; }
 };
 
 class Destroyer : public Ship {
 
 public:
   Destroyer() : Ship(DESTROYER_SIZE) {}
-  std::string getShipType() const { return DESTROYER_TYPE; }
+  std::string getShipType() const { return TYPE_DESTROYER; }
 };
 
 class Submarine : public Ship {
 
 public:
   Submarine() : Ship(SUBMARINE_SIZE) {}
-  std::string getShipType() const { return SUBMARINE_TYPE; }
+  std::string getShipType() const { return TYPE_SUBMARINE; }
 };
 
 class EmptySea : public Ship {
 
 public:
-  EmptySea() : Ship(1) {}
+  EmptySea(int row, int column) : Ship(1) {
+    bowRow = row;
+    bowColumn = column;
+  }
   bool shootAt(int row, int column);
   bool isSunk() const { return false; }
-  std::string getShipType() const { return "empty"; }
+  std::string getShipType() const { return TYPE_EMPTY; }
 };
 
 #endif

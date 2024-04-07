@@ -7,27 +7,34 @@ class Ship;
 class Ocean {
 
 private:
+  int maxRow, maxColumn, totalShips;
+  int firedShots, sunkShips;
   std::vector<std::vector<std::shared_ptr<Ship>>> ships;
-  int shotsFired;
-  int hitCount;
-  int shipsSunk;
+  std::vector<int> maxShipsCount;
+
+  bool isOccupied(int row, int column) const;
 
 public:
-  Ocean();
+  static constexpr int SUGGESTED_MAXGRIDSIZE = 20;
+  static bool isMaxShipsAllowed(int row, int column,
+                                std::vector<int> shipsCount);
 
-  int getShotsFired() const { return shotsFired; }
-  int getHitCount() const { return hitCount; }
-  int getShipsSunk() const { return shipsSunk; }
-  std::vector<std::vector<std::shared_ptr<Ship>>> &getShipArray() {
-    return ships;
+  Ocean(int row, int column, std::vector<int> shipsCount);
+
+  int getMaxRow() const { return maxRow; }
+  int getMaxColumn() const { return maxColumn; }
+  int getFiredShots() const { return firedShots; }
+  int getMinHitCounts() const;
+  std::shared_ptr<Ship> &getShip(int row, int column) {
+    return ships[row][column];
   }
-  bool isOccupied(int row, int column) const;
   bool isGameOver() const;
   bool shootAt(int row, int column);
   void putShipRandomly(std::shared_ptr<Ship> shipPtr);
-  void placeAllShipsRandomly();
+  void putAllshipsRandomly();
   void print() const;
   void printWithShips() const;
+  virtual ~Ocean() = default;
 };
 
 #endif
