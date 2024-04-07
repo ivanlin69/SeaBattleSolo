@@ -18,13 +18,14 @@ public:
   static constexpr int CRUISER_SIZE = 3;
   static constexpr int DESTROYER_SIZE = 2;
   static constexpr int SUBMARINE_SIZE = 1;
-
   // C++17, inline variable
-  static inline const std::string TYPE_BATTLESHIP = "battleship";
-  static inline const std::string TYPE_CRUISER = "cruiser";
-  static inline const std::string TYPE_DESTROYER = "destroyer";
-  static inline const std::string TYPE_SUBMARINE = "submarine";
-  static inline const std::string TYPE_EMPTY = "empty";
+  static inline std::vector<int> shipSizes = {BATTLESHIP_SIZE, CRUISER_SIZE,
+                                              DESTROYER_SIZE, SUBMARINE_SIZE};
+  static inline const std::string TYPE_BATTLESHIP = "Battleship";
+  static inline const std::string TYPE_CRUISER = "Cruiser";
+  static inline const std::string TYPE_DESTROYER = "Destroyer";
+  static inline const std::string TYPE_SUBMARINE = "Submarine";
+  static inline const std::string TYPE_EMPTY = "EmptySea";
 
   Ship(int length);
 
@@ -32,6 +33,7 @@ public:
   int getBowColumn() const { return bowColumn; }
   int getLength() const { return length; }
   const std::vector<bool> &getHit() const { return hit; }
+
   // Pure virtual, no implementation in the base class
   // Must be overridden by all derived classes (unless a derived class is also
   // abstract)

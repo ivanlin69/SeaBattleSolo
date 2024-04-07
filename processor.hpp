@@ -11,10 +11,12 @@ private:
   int mode;
 
 public:
-  Processor() { mode = 1; };
-  void modeSelection();
-  void gameSetUp();
+  Processor() { mode = 0; };
+  void welcomeMessage();
+  int modeSelection();
+  int gameSetUp();
   void gameProcessing();
+  void endMessage();
 };
 
 #endif

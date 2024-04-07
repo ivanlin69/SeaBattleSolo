@@ -7,18 +7,15 @@ class Ship;
 class Ocean {
 
 private:
+  int maxRow, maxColumn, totalShips;
+  int firedShots, sunkShips;
   std::vector<std::vector<std::shared_ptr<Ship>>> ships;
-  int maxRow;
-  int maxColumn;
-  int totalShips;
   std::vector<int> maxShipsCount;
-  int firedShots;
-  int hitCounts;
-  int sunkShips;
 
   bool isOccupied(int row, int column) const;
 
 public:
+  static constexpr int SUGGESTED_MAXGRIDSIZE = 20;
   static bool isMaxShipsAllowed(int row, int column,
                                 std::vector<int> shipsCount);
 
@@ -27,8 +24,7 @@ public:
   int getMaxRow() const { return maxRow; }
   int getMaxColumn() const { return maxColumn; }
   int getFiredShots() const { return firedShots; }
-  int getHitCounts() const { return hitCounts; }
-
+  int getMinHitCounts() const;
   std::shared_ptr<Ship> &getShip(int row, int column) {
     return ships[row][column];
   }
@@ -38,6 +34,7 @@ public:
   void putAllshipsRandomly();
   void print() const;
   void printWithShips() const;
+  virtual ~Ocean() = default;
 };
 
 #endif
