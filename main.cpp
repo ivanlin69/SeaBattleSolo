@@ -1,85 +1,60 @@
-#include "ocean.hpp"
-#include "ships.hpp"
-#include <iostream>
-#include <string>
+#include "processor.hpp"
 
 int main(int argc, const char *argv[]) {
 
-  std::string userInput;
-  std::vector<char> userInputArray;
-  int inputRow;
-  int inputColumn;
-  bool effectiveShot;
+  Processor processor;
+  processor.modeSelection();
+  processor.gameSetUp();
 
-  std::cout << "Welcom to the Battleship Game! Your goal is to destroy all "
-               "ships in the ocean with as few shots as possible.\n";
-  std::cout << "Let's go! Here is the map: \n";
+  /*
+  int maxRow = 10;
+  int maxColumn = 10;
+  int battleshipCount = 1;
+  int cruiserCount = 2;
+  int destroyerCount = 3;
+  int submarineCount = 4;
 
-  // sets up the game
-  Ocean ocean;
-  ocean.placeAllShipsRandomly();
-  std::cout << "\n";
-  ocean.print();
-  std::cout << "\n";
-
-  // just for debugging
-  ocean.printWithShips();
-
-  while (true) {
-
-    // get and parse the user input
+  if (mode == 2) {
     do {
-      std::cout << "Enter the location you want to shoot at - (Row,Column) \n";
-      std::cout << "(0 to 9, comma separated.): \n";
-      std::cout << "Or enter --exit to leave the game.\n";
+      std::cout << "Please enter the maximum size of the row: \n";
+      std::cin >> maxRow;
+      std::cout << "Please enter the maximum size of the column: \n";
+      std::cin >> maxColumn;
+      std::cout << "Please enter the number of battleships: \n";
+      std::cin >> battleshipCount;
+      std::cout << "Please enter the maximum size of cruisers: \n";
+      std::cin >> cruiserCount;
+      std::cout << "Please enter the maximum size of destroyers: \n";
+      std::cin >> destroyerCount;
+      std::cout << "Please enter the maximum size of submarines: \n";
+      std::cin >> submarineCount;
 
-      std::cin >> userInput;
+      std::cout << "Result:"
+                << "maxRow: " << maxRow << "maxColumn: " << maxColumn
+                << "battleshipCount: " << battleshipCount
+                << "cruiserCount: " << cruiserCount
+                << "destroyerCount: " << destroyerCount
+                << "submarineCount: " << submarineCount << "\n";
 
-      if (userInput == "--exit") {
-        std::cout << "\nThank you and good bye.\n";
-        return 0;
+      bool isAllowed = Ocean::isMaxShipsAllowed(
+          maxRow, maxColumn,
+          {battleshipCount, cruiserCount, destroyerCount, submarineCount});
+
+      if (isAllowed) {
+        break;
+      } else {
+        std::cout << "There are too many ships on the ocean, please try
+  again " "to lower the number of ships. \n";
       }
-      // if the user input is invalid, stay in the loop
-      else if (userInput.length() != 3) {
-        std::cout << "Invalid input. Please try again.\n";
-        continue;
-      }
-
-      inputRow = userInput[0] - '0';
-      inputColumn = userInput[2] - '0';
-      break;
-
     } while (true);
-
-    effectiveShot = ocean.shootAt(inputRow, inputColumn);
-
-    if (effectiveShot) {
-      std::cout << "Fired. You hit a ship! \n";
-      if (ocean.getShipArray()[inputRow][inputColumn]->isSunk()) {
-        std::cout << "You just sank a ship - "
-                  << ocean.getShipArray()[inputRow][inputColumn]->getShipType()
-                  << ". ";
-      }
-    }
-
-    else {
-      std::cout << "You missed a shot. ";
-    }
-
-    std::cout << "The ocean is updated for you: \n";
-    ocean.print();
-    std::cout << "\n";
-
-    if (ocean.isGameOver() == true) {
-      std::cout << "Game over! All the ships were sunk.\n";
-      std::cout << "Number of total shots fired: " << ocean.getShotsFired()
-                << ". \n";
-      std::cout << "Number of hits: " << ocean.getHitCount() << ". \n";
-      break;
-    }
   }
 
-  std::cout << "\nThank you and good bye.\n";
+  Ocean ocean(maxRow, maxColumn,
+              {battleshipCount, cruiserCount, destroyerCount,
+  submarineCount});
+*/
+  // sets up and run the game
+  processor.gameProcessing();
 
   return 0;
 }
