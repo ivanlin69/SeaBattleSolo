@@ -53,8 +53,8 @@ In customizable mode, players can set the grid size and choose the number and ty
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/battleship-game.git
-   cd battleship-game
+   git clone https://github.com/ivanlin69/EnhancedBattleShipGame.git
+   cd EnhancedBattleShipGame
    ```
 2. **Compile the Game** (make sure you have a C++ compiler installed):
    ```bash
