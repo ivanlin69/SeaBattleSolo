@@ -13,33 +13,33 @@ This project is a classic Battleship game implemented in C++. This version of th
 ## Game Rules and Mechanics
 
 ### Overview
-Battleship is a strategic game where each player tries to sink the other's fleet of ships by guessing their locations on a hidden grid. The game is played on two grids per player: one for placing your own ships and another for marking your shots against the opponent.
+Battleship is a strategic, single-player game where the player attempts to sink a fleet of ships by guessing their locations on a hidden grid. The ships are placed automatically by the program on a grid at the start of the game. The player's goal is to sink all ships by making strategic guesses about their positions.
 
 ### Ship Types and Sizes
-In this version of Battleship, the fleet consists of the following types of ships, each with different sizes:
+The game includes various types of ships, each occupying a different number of consecutive squares on the grid, arranged either horizontally or vertically:
 - **Battleship**: Size of 4 cells.
 - **Cruiser**: Size of 3 cells.
 - **Destroyer**: Size of 2 cells.
 - **Submarine**: Size of 1 cell.
 
-Each ship occupies a set number of consecutive squares on the grid, arranged either horizontally or vertically. The number and type of ships can be customized in the game settings.
+Ships cannot overlap each other or extend off the grid edges. The number and type of ships can be customized if playing in a customizable mode.
 
 ### Gameplay
-1. **Setup**: At the start of the game, players place their ships on their respective grids. Ships can be placed either horizontally or vertically but not diagonally, and they cannot overlap each other or go off the edge of the board.
-2. **Playing**: Players take turns guessing coordinates on the opponent's grid, attempting to hit the opponent’s ships. On a hit, the game marks that grid position and the player takes another turn. On a miss, the turn passes to the opponent.
-3. **Scoring Hits and Misses**: The game records each shot as a hit or a miss and marks this on the grid. Hits are typically marked with an "X" and misses with an "O".
-4. **Sinking Ships**: When all the squares that a ship occupies have been hit, the ship is considered sunk. The game notifies the player when a ship has been sunk.
+1. **Setup**: At the start of the game, the program automatically places the ships on the grid. The placement is random but adheres to the rules of non-overlapping and within the grid bounds.
+2. **Playing**: The player takes turns guessing coordinates on the grid to find and hit the ships. Each guess is marked on the grid: hits are marked with an "x" and misses with an "-".
+3. **Sinking Ships**: When all the squares that a ship occupies have been hit, that ship is considered sunk. The game notifies the player when a ship has been sunk and the ship will be marked marked with an "s".
 
 ### Winning the Game
-The game is won by the player who first sinks all the ships of the opponent. The game ends immediately when all ships of one player are sunk, declaring that player the winner.
+The objective is to sink all ships on the grid. The game is won when all ships have been sunk, and the game provides statistics at the end, such as the number of shots fired compared to the optimal number of shots needed.
 
 ### Strategy Tips
-- **Try to randomize your shots** at the beginning of the game to cover ground efficiently.
-- **Use patterns** once you have a hit to figure out the direction of the ship.
-- **Remember the sizes of remaining ships** to better guess where they might be placed based on the available space.
+- **Use a scattergun approach early on** to hit parts of ships.
+- **Once you have a hit**, focus your next guesses around that area to quickly sink the ship.
+- **Keep track of which ships have been sunk** and the size of ships that remain to inform your guessing strategy.
 
 ### Customization Options
-Players can customize the game by setting the grid size and the number and types of ships, making each game unique and tailored to their preference.
+In customizable mode, players can set the grid size and choose the number and types of ships, allowing for a personalized gameplay experience!
+
 
 ## Getting Started
 
