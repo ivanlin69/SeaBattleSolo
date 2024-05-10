@@ -1,10 +1,9 @@
-# Battleship Game
+# Battleship Game Enhanced
 
 ## Description
 This project is a classic Battleship game implemented in C++. This version of the game is designed to be played on the command line and offers both a standard and a customizable game mode.
 
 ## Features
-
 - **Customizable Grid Size**: Players can set the size of the game board.
 - **Variable Number of Ships**: Players can decide how many ships of each type they want to place.
 - **Random Ship Placement**: Ships are placed randomly on the board at the start of the game.
@@ -27,3 +26,31 @@ This project is a classic Battleship game implemented in C++. This version of th
    git clone https://github.com/yourusername/battleship-game.git
    cd battleship-game
    ```
+2. **Compile the Game** (make sure you have a C++ compiler installed):
+   ```bash
+   clang++ -std=c++17 -o Battleship main.cpp Processor.cpp Ocean.cpp Ship.cpp
+   ```
+3. **Run the game**
+   ```bash
+   ./Battleship
+   ```
+   
+## How to Play
+- **Start the Game**: Run the executable after building.
+- **Choose Your Mode**: Select the standard mode or customize your game setup.
+- **Gameplay**: Follow the on-screen instructions to enter the coordinates where you wish to shoot.
+- **Ending the Game**: The game ends automatically once all ships are sunk, or you can exit prematurely by typing --exit.
+
+## Customization and Extensibility
+- **Modular Design**: The Battleship game codebase is structured in a modular fashion, making it straightforward to customize elements like game rules, board size, and ship types. Developers can extend or modify the game mechanics according to their needs.
+- **Plug-and-Play Functionality**: The game's architecture allows for easy adaptation, enabling users to easily change game settings such as the map size and number of ships. This flexibility also facilitates integration into larger systems or applications, allowing the Battleship game to function as a component within a more complex software environment.
+- **Configurable Gameplay Options**: The game supports various configuration settings that allow users to adjust gameplay dynamics. This includes setting different game modes, adjusting the difficulty level, or customizing the number of ships and their placement, enhancing the game's replayability and challenge.
+
+## Contributing
+Contributions to the Sudoku Solver are welcome! Please fork the repository and submit a pull request with your enhancements.
+
+## License
+This project is licensed under the MIT License - see the [MIT License Documentation](https://opensource.org/licenses/MIT) for details.
+
+## Contact
+For support, please feel free to contact me.
