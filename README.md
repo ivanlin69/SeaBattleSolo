@@ -58,7 +58,7 @@ In customizable mode, players can set the grid size and choose the number and ty
    ```
 2. **Compile the Game** (make sure you have a C++ compiler installed):
    ```bash
-   clang++ -std=c++17 -o Battleship main.cpp Processor.cpp Ocean.cpp Ship.cpp
+   clang++ -std=c++17 -o Battleship main.cpp processor.cpp ocean.cpp ships.cpp
    ```
 3. **Run the game**
    ```bash
