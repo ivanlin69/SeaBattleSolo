@@ -26,7 +26,7 @@ The game includes various types of ships, each occupying a different number of c
 Ships cannot overlap each other or extend off the grid edges. The number and type of ships can be customized if playing in a customizable mode.
 
 ### Gameplay
-1. **Setup**: At the start of the game, the program automatically places the ships on the grid. The placement is random but adheres to the rules of non-overlapping and within the grid bounds.
+1. **Setup**: At the start of the game, the program automatically places the ships on the grid(1 Carrier, 1 Battleship, 2 Destroyers, 3 Submarines and 4 Patrol Boats in the standard mode). The placement is random but adheres to the rules of non-overlapping and within the grid bounds.
 2. **Playing**: The player takes turns guessing coordinates on the grid to find and hit the ships. Each guess is marked on the grid: hits are marked with an "x" and misses with an "-".
 3. **Sinking Ships**: When all the squares that a ship occupies have been hit, that ship is considered sunk. The game notifies the player when a ship has been sunk and the ship will be marked marked with an "s".
 
