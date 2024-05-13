@@ -7,7 +7,7 @@
 #include <string>
 
 void Processor::welcomeMessage() {
-    std::cout << "\n\n";
+    std::cout << "\n";
     std::cout << "================================================================\n";
     std::cout << " _________            __________         __    __  .__\n";
     std::cout << "/   _____/ ____ _____ \\______   \\_____ _/  |__/  |_|  |   ____\n";
@@ -146,7 +146,7 @@ int Processor::gameSetUp() {
 /** Handles the main gameplay loop, including player interaction and game state updates
  */
 void Processor::gameProcessing() {
-    std::cout << "\n... The challenge begins ... Let's Go!\n";
+    std::cout << "... The challenge begins ... Let's Go!\n";
     ocean->putAllshipsRandomly();
     std::cout << "\n";
     ocean->print();
@@ -240,5 +240,5 @@ void Processor::endMessage() {
     std::cout << "      _____|____|____|____\\___      \n";
     std::cout << "  -^-/                       /-^-^-  \n";
     std::cout << "    ^^^ ^^^^^^^^ ^^^^^^^^^ ^^^^  ^^  \n";
-    std::cout << "===========================================================\n";
+    std::cout << "================================================================\n";
 }
