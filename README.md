@@ -1,7 +1,7 @@
-# Battleship Game Enhanced
+# Sea Battle Solo
 
 ## Description
-This project is a classic Battleship game implemented in C++. This version of the game is designed to be played on the command line and offers both a standard and a customizable game mode.
+This project is a classic Sea Battle game implemented in C++. This version of the game is designed to be played on the command line and offers both a standard and a customizable game mode.
 
 ## Features
 - **Customizable Grid Size**: Players can set the size of the game board.
@@ -13,14 +13,15 @@ This project is a classic Battleship game implemented in C++. This version of th
 ## Game Rules and Mechanics
 
 ### Overview
-Battleship is a strategic, single-player game where the player attempts to sink a fleet of ships by guessing their locations on a hidden grid. The ships are placed automatically by the program on a grid at the start of the game. The player's goal is to sink all ships by making strategic guesses about their positions.
+Sea Battle Solo is a strategic, single-player game where the player attempts to sink a fleet of ships by guessing their locations on a hidden grid. The ships are placed automatically by the program on a grid at the start of the game. The player's goal is to sink all ships by making strategic guesses about their positions.
 
 ### Ship Types and Sizes
 The game includes various types of ships, each occupying a different number of consecutive squares on the grid, arranged either horizontally or vertically:
+- **Carrier**: Size of 5 cells.
 - **Battleship**: Size of 4 cells.
-- **Cruiser**: Size of 3 cells.
-- **Destroyer**: Size of 2 cells.
-- **Submarine**: Size of 1 cell.
+- **Destroyer**: Size of 3 cells.
+- **Submarine**: Size of 2 cells.
+- **Patrol Boat**: Size of 1 cell.
 
 Ships cannot overlap each other or extend off the grid edges. The number and type of ships can be customized if playing in a customizable mode.
 
@@ -45,7 +46,7 @@ In customizable mode, players can set the grid size and choose the number and ty
 
 ### Prerequisites
 
-- A modern C++ compiler that supports C++17 (e.g., GCC, Clang, MSVC)
+- A modern C++ compiler that supports C++17 (e.g., GCC, Clang)
 - CMake for building the project (optional)
 
 ### Installation
@@ -53,16 +54,16 @@ In customizable mode, players can set the grid size and choose the number and ty
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/ivanlin69/EnhancedBattleShipGame.git
-   cd EnhancedBattleShipGame
+   git clone https://github.com/ivanlin69/SeaBattleSolo.git
+   cd SeaBattleSolo
    ```
 2. **Compile the Game** (make sure you have a C++ compiler installed):
    ```bash
-   clang++ -std=c++17 -o Battleship main.cpp processor.cpp ocean.cpp ships.cpp
+   clang++ -o SeaBattleSolo main.cpp processor.cpp ocean.cpp ships.cpp -std=c++17
    ```
 3. **Run the game**
    ```bash
-   ./Battleship
+   ./SeaBattleSolo
    ```
    
 ## How to Play
