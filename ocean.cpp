@@ -256,6 +256,7 @@ void Ocean::print() const {
 // Prints the Ocean with the location of the ships.(just for debugging)
 void Ocean::printWithShips() const {
     // similar to print() but only shows the locations of the ships
+    std::cout << "**The following map is shown for dugging purpose. Need to be removed while production.**\n\n";
     std::cout << "  ";
     for (int i = 0; i < maxColumn; i++) {
         if (i < 10) {
@@ -294,4 +295,5 @@ void Ocean::printWithShips() const {
         }
     }
     std::cout << "\n";
+    std::cout << "**The above map is shown for dugging purpose. Need to be removed while production.**\n";
 }
