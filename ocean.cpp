@@ -19,7 +19,6 @@ Ocean::Ocean(int row, int column, std::vector<int> shipsCount) : firedShots(0), 
     for (int i = 0; i < maxRow; i++) {
         ships[i].resize(maxColumn);
         for (int j = 0; j < maxColumn; j++) {
-            // C++14 std::make_shared<>
             // Initialize each cell with an EmptySea object
             ships[i][j] = std::make_shared<EmptySea>(i, j);
         }
