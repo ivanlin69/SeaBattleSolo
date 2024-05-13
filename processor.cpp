@@ -135,8 +135,6 @@ int Processor::gameSetUp() {
         } while (true);
     }
 
-    // std::make_unique is a template function, the type of parameters must
-    //  sometimes be explicitly specified to help the compiler with type deduction
     // Create and initialize the Ocean object with the default/specified dimensions and ship counts
     ocean.reset(new Ocean(maxRow, maxColumn, std::vector<int>{carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount}));
     // Indicates a successful setup
