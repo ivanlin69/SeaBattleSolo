@@ -7,7 +7,7 @@ class Ship;
 
 // Represents the game board and manages the grid and state of ships
 class Ocean {
-
+    
 private:
     // Dimensions of the ocean grid
     int maxRow, maxColumn;
@@ -23,14 +23,14 @@ private:
     std::vector<int> maxShipsCount;
     // Helper function to determine if a cell is occupied by a ship
     bool isOccupied(int row, int column) const;
-
+    
 public:
     static const int SUGGESTED_MAXGRIDSIZE = 20;
     // Determine if the maximum number of ships have been placed
     static bool isMaxShipsAllowed(int row, int column, std::vector<int> shipsCount);
     // Constructor to initialize the ocean grid with specific dimensions and ship counts
     Ocean(int row, int column, std::vector<int> shipsCount);
-
+    
     int getMaxRow() const { return maxRow; }
     int getMaxColumn() const { return maxColumn; }
     int getFiredShots() const { return firedShots; }

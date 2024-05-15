@@ -19,13 +19,13 @@ const std::string Ship::TYPE_EMPTY = "EmptySea";
 
 // Helper function for initializing the shipSizes
 std::vector<int> Ship::initializingShipSizes() {
-     std::vector<int> tempVec;
-     tempVec.push_back(Ship::CARRIER_SIZE);
-     tempVec.push_back(Ship::BATTLESHIP_SIZE);
-     tempVec.push_back(Ship::DESTROYER_SIZE);
-     tempVec.push_back(Ship::SUBMARINE_SIZE);
-     tempVec.push_back(Ship::PATROLBOAT_SIZE);
-     return tempVec;
+    std::vector<int> tempVec;
+    tempVec.push_back(Ship::CARRIER_SIZE);
+    tempVec.push_back(Ship::BATTLESHIP_SIZE);
+    tempVec.push_back(Ship::DESTROYER_SIZE);
+    tempVec.push_back(Ship::SUBMARINE_SIZE);
+    tempVec.push_back(Ship::PATROLBOAT_SIZE);
+    return tempVec;
 }
 //shipSizes= {Ship::CARRIER_SIZE, Ship::BATTLESHIP_SIZE, Ship::DESTROYER_SIZE, Ship::SUBMARINE_SIZE, Ship::PATROLBOAT_SIZE}
 const std::vector<int> Ship::shipSizes = Ship::initializingShipSizes();
@@ -61,7 +61,7 @@ bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
         for (int colOffset = -1; colOffset <= 1; colOffset++) {
             int curRow = row + rowOffset;
             int curColumn = column + colOffset;
-
+            
             // Skip the check for the original position or out-of-bound spots
             if ((rowOffset == 0 && colOffset == 0) || !(isValidSpot(curRow, curColumn, ocean)))
                 continue;
@@ -79,7 +79,7 @@ bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
  Returns true if the ship can be placed; otherwise, returns false.
  */
 bool Ship::okToPlaceShipAt(int row, int column, bool horizontal, Ocean &ocean) const {
-
+    
     for (int i = 0; i < getLength(); ++i) {
         int curRow = horizontal ? row : (row - i);
         int curColumn = horizontal ? (column - i) : column;
@@ -116,11 +116,11 @@ void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
  Returns true if the shot hits any part of the ship, otherwise false.
  */
 bool Ship::shootAt(int row, int column) {
-
+    
     if (isSunk()) {
         return false;
     }
-
+    
     int curRow = bowRow;
     int curCol = bowColumn;
     // Check each segment of the ship to see if it matches the targeted position

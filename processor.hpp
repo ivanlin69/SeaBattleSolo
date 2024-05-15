@@ -6,12 +6,12 @@
 
 // The Processor class manages the game logic and interactions for the game.
 class Processor {
-
+    
 private:
     Ocean* ocean;
     // Represents the current game mode(0: Standard Mode; 1: Custom Mode)
     int mode;
-
+    
 public:
     // Default constructor, initializes the game mode to 0
     Processor() : ocean(NULL), mode(0){};

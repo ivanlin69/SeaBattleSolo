@@ -7,18 +7,18 @@
 /**
  Initializes the ocean grid with specified dimensions and sets up ships according to the provided counts
  Parameters:
-  row: The number of rows in the ocean grid
-  column: The number of columns in the ocean grid
-  shipsCount: A vector containing counts of each type of ship to be placed in the ocean
+ row: The number of rows in the ocean grid
+ column: The number of columns in the ocean grid
+ shipsCount: A vector containing counts of each type of ship to be placed in the ocean
  */
 Ocean::Ocean(int row, int column, std::vector<int> shipsCount) : firedShots(0), sunkShips(0), totalShips(0), maxRow(row), maxColumn(column), maxShipsCount(shipsCount) {
     for (size_t i = 0; i < shipsCount.size(); i++) {
         totalShips += shipsCount[i];
     }
     ships.resize(maxRow);
-    for (size_t i = 0; i < maxRow; i++) {
+    for (int i = 0; i < maxRow; i++) {
         ships[i].resize(maxColumn);
-        for (size_t j = 0; j < maxColumn; j++) {
+        for (int j = 0; j < maxColumn; j++) {
             // Initialize each cell with an EmptySea object
             ships[i][j] = new EmptySea(i, j);
         }
@@ -27,9 +27,24 @@ Ocean::Ocean(int row, int column, std::vector<int> shipsCount) : firedShots(0), 
 
 // Define the destructor
 Ocean::~Ocean(){
-    for (size_t row = 0; row < maxRow; ++row) {
-        for (size_t col = 0; col < maxColumn; ++col) {
-            delete ships[row][col];
+    for (int row = 0; row < maxRow; ++row) {
+        for (int col = 0; col < maxColumn; ++col) {
+            
+            Ship* ship = ships[row][col];
+            if(ship != NULL){
+                int curRow = ship->getBowRow();
+                int curCol = ship->getBowColumn();
+                bool horizontal = ship->isHorizontal();
+                
+                // Iterate through the ship and mark all cell to nullptr
+                for (size_t i = 0; i < ship->getLength(); ++i) {
+                    ships[curRow][curCol] = NULL;
+                    // Update the position to check next segment based on orientation
+                    horizontal ? curCol-- : curRow--;
+                }
+                // safely free the allocated memory
+                delete ship;
+            }
         }
     }
 }
@@ -45,9 +60,9 @@ bool Ocean::isOccupied(int row, int column) const {
 /**
  Static method to determine if the maximum number of ships allowed on the grid is exceeded
  Parameters:
-   maxRow: The number of rows in the grid.
-   maxColumn: The number of columns in the grid.
-   shipsCount: A vector of integers representing the number of each type of ship.
+ maxRow: The number of rows in the grid.
+ maxColumn: The number of columns in the grid.
+ shipsCount: A vector of integers representing the number of each type of ship.
  Returns true if the calculated maximum capacity does not exceed 150% of the grid capacity, false otherwise.
  */
 bool Ocean::isMaxShipsAllowed(int maxRow, int maxColumn,
@@ -84,8 +99,8 @@ bool Ocean::isGameOver() const {
 /**
  Processes a shot at the specified grid location
  Parameters:
-    row: Row index where the shot is fired.
-    column: Column index where the shot is fired.
+ row: Row index where the shot is fired.
+ column: Column index where the shot is fired.
  Increments the shot counter and checks if the shot results in a ship being hit and possibly sunk.
  Returns true if the shot hits a ship, false otherwise.
  */
@@ -101,7 +116,7 @@ bool Ocean::shootAt(int row, int column) {
 /**
  Places a single ship randomly on the ocean grid
  Parameters:
-    shipPtr: Shared pointer to the ship to be placed
+ shipPtr: Shared pointer to the ship to be placed
  */
 void Ocean::putShipRandomly(Ship* shipPtr) {
     // Seed for generating random numbers
@@ -116,7 +131,7 @@ void Ocean::putShipRandomly(Ship* shipPtr) {
     int randRow = rand_int_row(gen);
     int randColumn = rand_int_column(gen);
     bool randHorizontal = rand_bool(gen);
-
+    
     // Continuously generate new positions until a valid one is found
     while (
            !shipPtr->okToPlaceShipAt(randRow, randColumn, randHorizontal, *this)) {
@@ -150,7 +165,7 @@ void Ocean::putAllshipsRandomly() {
                     maxShipNum--;
                 }
                 break;
-
+                
             case 1:
                 // Check if more ships of the current type need to be placed
                 if (maxShipsCountCopy[currentShip] > 0) {
@@ -161,7 +176,7 @@ void Ocean::putAllshipsRandomly() {
                     maxShipNum--;
                 }
                 break;
-
+                
             case 2:
                 if (maxShipsCountCopy[currentShip] > 0) {
                     putShipRandomly(new Destroyer());
@@ -169,7 +184,7 @@ void Ocean::putAllshipsRandomly() {
                     maxShipNum--;
                 }
                 break;
-
+                
             case 3:
                 if (maxShipsCountCopy[currentShip] > 0) {
                     putShipRandomly(new Submarine());
@@ -177,7 +192,7 @@ void Ocean::putAllshipsRandomly() {
                     maxShipNum--;
                 }
                 break;
-
+                
             case 4:
                 if (maxShipsCountCopy[currentShip] > 0) {
                     putShipRandomly(new Patrolboat());
@@ -186,7 +201,7 @@ void Ocean::putAllshipsRandomly() {
                 }
                 break;
         }
-
+        
         if (maxShipsCountCopy[currentShip] > 0) {
             continue;
         } else {
@@ -225,13 +240,13 @@ void Ocean::print() const {
                 // Output the representation of the ship at this position
                 std::cout << *(this->ships[row][col]) << "  ";
             }
-
+            
             // if the ship isn't sunk
             else {
                 // gets the condition of the ship at the given location
                 int bowRow = this->ships[row][col]->getBowRow();
                 int bowColumn = this->ships[row][col]->getBowColumn();
-
+                
                 // iterates over the ship's hit array to check if the part is hit or not
                 for (size_t k = 0; k < this->ships[row][col]->getLength(); ++k) {
                     if (bowRow == row && bowColumn == col) {
