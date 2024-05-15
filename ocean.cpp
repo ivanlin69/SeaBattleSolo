@@ -7,9 +7,9 @@
 /**
  Initializes the ocean grid with specified dimensions and sets up ships according to the provided counts
  Parameters:
- row: The number of rows in the ocean grid
- column: The number of columns in the ocean grid
- shipsCount: A vector containing counts of each type of ship to be placed in the ocean
+  row: The number of rows in the ocean grid
+  column: The number of columns in the ocean grid
+  shipsCount: A vector containing counts of each type of ship to be placed in the ocean
  */
 Ocean::Ocean(int row, int column, std::vector<int> shipsCount) : firedShots(0), sunkShips(0), totalShips(0), maxRow(row), maxColumn(column), maxShipsCount(shipsCount) {
     for (size_t i = 0; i < shipsCount.size(); i++) {
@@ -19,32 +19,9 @@ Ocean::Ocean(int row, int column, std::vector<int> shipsCount) : firedShots(0), 
     for (int i = 0; i < maxRow; i++) {
         ships[i].resize(maxColumn);
         for (int j = 0; j < maxColumn; j++) {
+            // C++14 std::make_shared<>
             // Initialize each cell with an EmptySea object
-            ships[i][j] = new EmptySea(i, j);
-        }
-    }
-}
-
-// Define the destructor
-Ocean::~Ocean(){
-    for (int row = 0; row < maxRow; ++row) {
-        for (int col = 0; col < maxColumn; ++col) {
-            
-            Ship* ship = ships[row][col];
-            if(ship != NULL){
-                int curRow = ship->getBowRow();
-                int curCol = ship->getBowColumn();
-                bool horizontal = ship->isHorizontal();
-                
-                // Iterate through the ship and mark all cell to nullptr
-                for (size_t i = 0; i < ship->getLength(); ++i) {
-                    ships[curRow][curCol] = NULL;
-                    // Update the position to check next segment based on orientation
-                    horizontal ? curCol-- : curRow--;
-                }
-                // safely free the allocated memory
-                delete ship;
-            }
+            ships[i][j] = std::make_shared<EmptySea>(i, j);
         }
     }
 }
@@ -60,9 +37,9 @@ bool Ocean::isOccupied(int row, int column) const {
 /**
  Static method to determine if the maximum number of ships allowed on the grid is exceeded
  Parameters:
- maxRow: The number of rows in the grid.
- maxColumn: The number of columns in the grid.
- shipsCount: A vector of integers representing the number of each type of ship.
+   maxRow: The number of rows in the grid.
+   maxColumn: The number of columns in the grid.
+   shipsCount: A vector of integers representing the number of each type of ship.
  Returns true if the calculated maximum capacity does not exceed 150% of the grid capacity, false otherwise.
  */
 bool Ocean::isMaxShipsAllowed(int maxRow, int maxColumn,
@@ -99,8 +76,8 @@ bool Ocean::isGameOver() const {
 /**
  Processes a shot at the specified grid location
  Parameters:
- row: Row index where the shot is fired.
- column: Column index where the shot is fired.
+    row: Row index where the shot is fired.
+    column: Column index where the shot is fired.
  Increments the shot counter and checks if the shot results in a ship being hit and possibly sunk.
  Returns true if the shot hits a ship, false otherwise.
  */
@@ -116,9 +93,9 @@ bool Ocean::shootAt(int row, int column) {
 /**
  Places a single ship randomly on the ocean grid
  Parameters:
- shipPtr: Shared pointer to the ship to be placed
+    shipPtr: Shared pointer to the ship to be placed
  */
-void Ocean::putShipRandomly(Ship* shipPtr) {
+void Ocean::putShipRandomly(std::shared_ptr<Ship> shipPtr) {
     // Seed for generating random numbers
     std::random_device rd;
     // Random number generator
@@ -158,7 +135,7 @@ void Ocean::putAllshipsRandomly() {
             case 0:
                 // Check if more ships of the current type need to be placed
                 if (maxShipsCountCopy[currentShip] > 0) {
-                    putShipRandomly(new Carrier());
+                    putShipRandomly(std::make_shared<Carrier>());
                     // Decrement the count of this ship type
                     maxShipsCountCopy[currentShip]--;
                     // Decrement the total number of ships to place
@@ -169,7 +146,7 @@ void Ocean::putAllshipsRandomly() {
             case 1:
                 // Check if more ships of the current type need to be placed
                 if (maxShipsCountCopy[currentShip] > 0) {
-                    putShipRandomly(new Battleship());
+                    putShipRandomly(std::make_shared<Battleship>());
                     // Decrement the count of this ship type
                     maxShipsCountCopy[currentShip]--;
                     // Decrement the total number of ships to place
@@ -179,7 +156,7 @@ void Ocean::putAllshipsRandomly() {
                 
             case 2:
                 if (maxShipsCountCopy[currentShip] > 0) {
-                    putShipRandomly(new Destroyer());
+                    putShipRandomly(std::make_shared<Destroyer>());
                     maxShipsCountCopy[currentShip]--;
                     maxShipNum--;
                 }
@@ -187,7 +164,7 @@ void Ocean::putAllshipsRandomly() {
                 
             case 3:
                 if (maxShipsCountCopy[currentShip] > 0) {
-                    putShipRandomly(new Submarine());
+                    putShipRandomly(std::make_shared<Submarine>());
                     maxShipsCountCopy[currentShip]--;
                     maxShipNum--;
                 }
@@ -195,7 +172,7 @@ void Ocean::putAllshipsRandomly() {
                 
             case 4:
                 if (maxShipsCountCopy[currentShip] > 0) {
-                    putShipRandomly(new Patrolboat());
+                    putShipRandomly(std::make_shared<Patrolboat>());
                     maxShipsCountCopy[currentShip]--;
                     maxShipNum--;
                 }
@@ -213,46 +190,46 @@ void Ocean::putAllshipsRandomly() {
 void Ocean::print() const {
     // print the coordinates for the column
     std::cout << "  ";
-    for (size_t col = 0; col < maxColumn; ++col) {
-        if (col < 10) {
-            std::cout << " " << col << " ";
+    for (int i = 0; i < maxColumn; i++) {
+        if (i < 10) {
+            std::cout << " " << i << " ";
         } else {
-            std::cout << col << " ";
+            std::cout << i << " ";
         }
     }
     std::cout << "\n";
     // use nested for loops to get and prints the ships
     // for the row
-    for (size_t row = 0; row < maxRow; ++row) {
+    for (int i = 0; i < maxRow; i++) {
         // prints the coordinates before printing the ships
-        if (row < 10) {
-            std::cout << " " << row << " ";
+        if (i < 10) {
+            std::cout << " " << i << " ";
         } else {
-            std::cout << row << " ";
+            std::cout << i << " ";
         }
         // for the column
-        for (size_t col = 0; col < maxColumn; ++col) {
+        for (int j = 0; j < maxColumn; j++) {
             // if the ship is sunk, or it's an empty sea got hit before, just print
             // the ship (will be "s" / "-")
-            if (this->ships[row][col]->isSunk() == true ||
-                (this->ships[row][col]->getShipType() == Ship::TYPE_EMPTY &&
-                 this->ships[row][col]->getHit()[0] == true)) {
+            if (this->ships[i][j]->isSunk() == true ||
+                (this->ships[i][j]->getShipType() == Ship::TYPE_EMPTY &&
+                 this->ships[i][j]->getHit()[0] == true)) {
                 // Output the representation of the ship at this position
-                std::cout << *(this->ships[row][col]) << "  ";
+                std::cout << *(this->ships[i][j]) << "  ";
             }
             
             // if the ship isn't sunk
             else {
                 // gets the condition of the ship at the given location
-                int bowRow = this->ships[row][col]->getBowRow();
-                int bowColumn = this->ships[row][col]->getBowColumn();
+                int bowRow = this->ships[i][j]->getBowRow();
+                int bowColumn = this->ships[i][j]->getBowColumn();
                 
                 // iterates over the ship's hit array to check if the part is hit or not
-                for (size_t k = 0; k < this->ships[row][col]->getLength(); ++k) {
-                    if (bowRow == row && bowColumn == col) {
+                for (int k = 0; k < this->ships[i][j]->getLength(); k++) {
+                    if (bowRow == i && bowColumn == j) {
                         // if is hit, then print the ship
-                        if (this->ships[row][col]->getHit()[k] == true) {
-                            std::cout << *(this->ships[row][col]) << "  ";
+                        if (this->ships[i][j]->getHit()[k] == true) {
+                            std::cout << *(this->ships[i][j]) << "  ";
                             break;
                         } else {
                             // otherwise, print ". "
@@ -260,7 +237,7 @@ void Ocean::print() const {
                             break;
                         }
                     } else {
-                        if (this->ships[row][col]->isHorizontal()) {
+                        if (this->ships[i][j]->isHorizontal()) {
                             bowColumn--;
                         } else {
                             bowRow--;
@@ -269,7 +246,7 @@ void Ocean::print() const {
                 }
             }
             // If it's the end of the column, prints an empty line
-            if (col == maxColumn - 1) {
+            if (j == maxColumn - 1) {
                 std::cout << "\n";
             }
         }
@@ -281,38 +258,38 @@ void Ocean::printWithShips() const {
     // similar to print() but only shows the locations of the ships
     std::cout << "**The following map is shown for dugging purpose. Need to be removed while production.**\n\n";
     std::cout << "  ";
-    for (size_t col = 0; col < maxColumn; col++) {
-        if (col < 10) {
-            std::cout << " " << col << " ";
+    for (int i = 0; i < maxColumn; i++) {
+        if (i < 10) {
+            std::cout << " " << i << " ";
         } else {
-            std::cout << col << " ";
+            std::cout << i << " ";
         }
     }
     std::cout << "\n";
-    for (size_t row = 0; row < maxRow; row++) {
+    for (int i = 0; i < maxRow; i++) {
         // prints the coordinates before printing the ships
-        if (row < 10) {
-            std::cout << " " << row << " ";
+        if (i < 10) {
+            std::cout << " " << i << " ";
         } else {
-            std::cout << row << " ";
+            std::cout << i << " ";
         }
         // Print a specific marker based on ship type or a blank space for empty sea
-        for (size_t col = 0; col < maxColumn; col++) {
-            if (this->ships[row][col]->getShipType() == Ship::TYPE_CARRIER) {
+        for (int j = 0; j < maxColumn; j++) {
+            if (this->ships[i][j]->getShipType() == Ship::TYPE_CARRIER) {
                 std::cout << "c  ";
-            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_BATTLESHIP) {
+            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_BATTLESHIP) {
                 std::cout << "b  ";
-            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_DESTROYER) {
+            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_DESTROYER) {
                 std::cout << "d  ";
-            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_SUBMARINE) {
+            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_SUBMARINE) {
                 std::cout << "s  ";
-            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_PATROLBOAT) {
+            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_PATROLBOAT) {
                 std::cout << "p  ";
             } else {
                 std::cout << "   ";
             }
             // If it's the end of the column, prints an empty line
-            if (col == maxColumn - 1) {
+            if (j == maxColumn - 1) {
                 std::cout << "\n";
             }
         }
