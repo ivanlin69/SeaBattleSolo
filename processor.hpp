@@ -14,7 +14,7 @@ private:
     
 public:
     // Default constructor, initializes the game mode to 0
-    Processor() { mode = 0; };
+    Processor() : mode(0) {};
     // Displays the welcome message at the start of the game
     void welcomeMessage();
     // Prompts the user to select the game mode
@@ -25,6 +25,7 @@ public:
     void gameProcessing();
     // Displays the ending message based on the outcome of the game
     void endMessage();
+    ~Processor() {}
 };
 
 #endif

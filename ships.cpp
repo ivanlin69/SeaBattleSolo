@@ -45,7 +45,7 @@ bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
         for (int colOffset = -1; colOffset <= 1; colOffset++) {
             int curRow = row + rowOffset;
             int curColumn = column + colOffset;
-
+            
             // Skip the check for the original position or out-of-bound spots
             if ((rowOffset == 0 && colOffset == 0) || !(isValidSpot(curRow, curColumn, ocean)))
                 continue;
@@ -63,7 +63,7 @@ bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
  Returns true if the ship can be placed; otherwise, returns false.
  */
 bool Ship::okToPlaceShipAt(int row, int column, bool horizontal, Ocean &ocean) const {
-
+    
     for (int i = 0; i < getLength(); ++i) {
         int curRow = horizontal ? row : (row - i);
         int curColumn = horizontal ? (column - i) : column;
@@ -98,11 +98,11 @@ void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
  Returns true if the shot hits any part of the ship, otherwise false.
  */
 bool Ship::shootAt(int row, int column) {
-
+    
     if (isSunk()) {
         return false;
     }
-
+    
     int curRow = bowRow;
     int curCol = bowColumn;
     // Check each segment of the ship to see if it matches the targeted position

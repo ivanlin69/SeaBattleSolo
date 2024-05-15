@@ -22,23 +22,23 @@ void Processor::welcomeMessage() {
     std::cout << "                 /______ / \\____/|____/\\____/              \n";
     std::cout << "                       \\/                              -v2.51\n";
     std::cout << "================================================================\n";
-
+    
     std::cout << "\nWelcom to the Sea Battle Solo!\n"
     << "Your goal is to destroy all "
     "ships in the ocean with as few shots as possible.\n\n";
 }
 
 int Processor::modeSelection() {
-
+    
     do {
         std::cout << "First of all, please choose the mode you want to play!\n"
         << "- Enter '0' for Standard Mode\n"
         << "- Enter '1' for Custom Mode\n"
         << "- Or enter '--exit' to leave the game:\n";
-
+        
         std::string userInput;
         std::getline(std::cin, userInput);
-
+        
         if (userInput == "--exit") {
             endMessage();
             return 1;
@@ -65,7 +65,7 @@ int Processor::gameSetUp() {
     int destroyerCount = 2;
     int submarineCount = 3;
     int patrolboatCount = 4;
-
+    
     std::string userInput;
     // If the mode is set to a custom setup
     if (mode == 1) {
@@ -73,24 +73,24 @@ int Processor::gameSetUp() {
         do {
             std::cout << "\nPlease enter the maximum size of the map - (Row, Column)\n" << "(Two numbers separated by a comma (e.g., 6,8).): \n";
             std::cout << "Or enter '--exit' to leave the game.\n";
-
+            
             std::getline(std::cin, userInput);
-
+            
             if (userInput == "--exit") {
                 endMessage();
                 // Exit with a code indicating the game setup was aborted
                 return 1;
             }
-
+            
             char delimiter;
             std::stringstream stringStream(userInput);
             stringStream >> maxRow >> delimiter >> maxColumn;
-
+            
             if (stringStream.fail()) {
                 std::cout << "Invalid input. Please try again.\n";
                 continue;
             }
-
+            
             if (maxRow >= Ocean::SUGGESTED_MAXGRIDSIZE ||
                 maxColumn >= Ocean::SUGGESTED_MAXGRIDSIZE || maxRow < 0 ||
                 maxColumn < 0) {
@@ -100,31 +100,31 @@ int Processor::gameSetUp() {
             }
             break;
         } while (true);
-
+        
         // Collect custom ship counts from the user
         do {
             std::cout << "\nPlease enter the numbers of ships - (Carrier, Battleship, Destroyer, Submarine, PatrolBoat)\n"
             << "(Four numbers separated by a comma (e.g., 1,1,2,3,4).):\n";
             std::cout << "Or enter '--exit' to leave the game.\n";
-
+            
             std::getline(std::cin, userInput);
-
+            
             if (userInput == "--exit") {
                 endMessage();
                 return 1;
             }
-
+            
             char delimiter;
             std::stringstream stringStream(userInput);
             stringStream >> carrierCount >> delimiter >> battleshipCount >> delimiter >> destroyerCount >> delimiter >> submarineCount >> delimiter >> patrolboatCount;
-
+            
             if (stringStream.fail()) {
                 std::cout << "Invalid input. Please try again.\n";
                 continue;
             }
             // Check if the input fails or the ship numbers are not allowed
             bool isAllowed = Ocean::isMaxShipsAllowed(maxRow, maxColumn, {carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
-
+            
             if (isAllowed) {
                 break;
             } else {
@@ -134,7 +134,9 @@ int Processor::gameSetUp() {
             break;
         } while (true);
     }
-
+    
+    // std::make_unique is a template function, the type of parameters must
+    //  sometimes be explicitly specified to help the compiler with type deduction
     // Create and initialize the Ocean object with the default/specified dimensions and ship counts
     ocean.reset(new Ocean(maxRow, maxColumn, std::vector<int>{carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount}));
     // Indicates a successful setup
@@ -149,39 +151,39 @@ void Processor::gameProcessing() {
     std::cout << "\n";
     ocean->print();
     std::cout << "\n";
-
+    
     // Debugging: print the ocean with ships visible (need to be removed in production)
     ocean->printWithShips();
-
+    
     while (true) {
-
+        
         int targetRow;
         int targetColumn;
         bool effectiveShot;
-
+        
         // Get and validate user input for shooting coordinates
         do {
             std::cout << "\nPlease enter the location you want to shoot at - (Row, Column) \n";
             std::cout << "(Two numbers separated by a comma (e.g., 3,9).): \n";
             std::cout << "Or enter '--exit' to leave the game.\n";
-
+            
             std::string userInput;
             std::getline(std::cin, userInput);
-
+            
             if (userInput == "--exit") {
                 endMessage();
                 return;
             }
-
+            
             char delimiter;
             std::stringstream stringStream(userInput);
             stringStream >> targetRow >> delimiter >> targetColumn;
-
+            
             if (stringStream.fail()) {
                 std::cout << "Invalid input. Please try again.\n";
                 continue;
             }
-
+            
             if (targetRow >= ocean->getMaxColumn() ||
                 targetColumn >= ocean->getMaxColumn() || targetRow < 0 ||
                 targetColumn < 0) {
@@ -194,7 +196,7 @@ void Processor::gameProcessing() {
         } while (true);
         // Attempt to shoot at the given location
         effectiveShot = ocean->shootAt(targetRow, targetColumn);
-
+        
         if (effectiveShot) {
             std::cout << "\nFired! You hit a ship!\n";
             if (ocean->getShip(targetRow, targetColumn)->isSunk()) {
@@ -203,7 +205,7 @@ void Processor::gameProcessing() {
                 << ". \n";
             }
         }
-
+        
         else {
             std::cout << "\nYou missed a shot.\n";
         }
@@ -211,7 +213,7 @@ void Processor::gameProcessing() {
         std::cout << "The ocean is updated: \n\n";
         ocean->print();
         std::cout << "\n";
-
+        
         if (ocean->isGameOver() == true) {
             std::cout << "Game over! All the ships were sunk.\n\n";
             std::cout << "The number of total shots fired: " << ocean->getFiredShots() << ". \n";
