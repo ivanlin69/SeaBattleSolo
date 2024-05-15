@@ -6,7 +6,13 @@
 #include <vector>
 
 class Ocean;
-class Ship : public std::enable_shared_from_this<Ship> {
+class Ship {
+    
+private:
+    // Helper functor for isSunk
+    struct IsTrue{
+        bool operator()(bool h) const { return h; }
+    };
     
 protected:
     // Tracks hits on each segment of the ship
@@ -20,22 +26,22 @@ protected:
     
 public:
     // Ship sizes as constants
-    static constexpr int CARRIER_SIZE = 5;
-    static constexpr int BATTLESHIP_SIZE = 4;
-    static constexpr int DESTROYER_SIZE = 3;
-    static constexpr int SUBMARINE_SIZE = 2;
-    static constexpr int PATROLBOAT_SIZE = 1;
+    static const int CARRIER_SIZE;
+    static const int BATTLESHIP_SIZE;
+    static const int DESTROYER_SIZE;
+    static const int SUBMARINE_SIZE;
+    static const int PATROLBOAT_SIZE;
     
+    static const std::string TYPE_CARRIER;
+    static const std::string TYPE_BATTLESHIP;
+    static const std::string TYPE_DESTROYER;
+    static const std::string TYPE_SUBMARINE;
+    static const std::string TYPE_PATROLBOAT;
+    static const std::string TYPE_EMPTY;
     
-    // C++17, inline variable
-    // Ship types as inline variables for easy modification and access
-    static inline std::vector<int> shipSizes = {CARRIER_SIZE, BATTLESHIP_SIZE, DESTROYER_SIZE, SUBMARINE_SIZE, PATROLBOAT_SIZE};
-    static inline const std::string TYPE_CARRIER = "Carrier";
-    static inline const std::string TYPE_BATTLESHIP = "Battleship";
-    static inline const std::string TYPE_DESTROYER = "Destroyer";
-    static inline const std::string TYPE_SUBMARINE = "Submarine";
-    static inline const std::string TYPE_PATROLBOAT = "PatrolBoat";
-    static inline const std::string TYPE_EMPTY = "EmptySea";
+    static const std::vector<int> shipSizes;
+    // Helper function for initializing the shipSizes
+    static std::vector<int> initializingShipSizes();
     
     // Constructor initializing the ship's length.
     Ship(int length);
@@ -62,7 +68,7 @@ public:
     friend std::ostream& operator<<(std::ostream &os, const Ship &ship);
     
     // Default virtual destructor for proper cleanup in derived classes
-    virtual ~Ship() = default;
+    virtual ~Ship() {}
 };
 
 // Concrete classes representing different types of ships
@@ -70,7 +76,7 @@ class Carrier : public Ship {
     
 public:
     Carrier() : Ship(CARRIER_SIZE) {}
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_CARRIER;
     }
 };
@@ -79,7 +85,7 @@ class Battleship : public Ship {
     
 public:
     Battleship() : Ship(BATTLESHIP_SIZE) {}
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_BATTLESHIP;
     }
 };
@@ -88,7 +94,7 @@ class Destroyer : public Ship {
     
 public:
     Destroyer() : Ship(DESTROYER_SIZE) {}
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_DESTROYER;
     }
 };
@@ -97,7 +103,7 @@ class Submarine : public Ship {
     
 public:
     Submarine() : Ship(SUBMARINE_SIZE) {}
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_SUBMARINE;
     }
 };
@@ -106,7 +112,7 @@ class Patrolboat : public Ship {
     
 public:
     Patrolboat() : Ship(PATROLBOAT_SIZE) {}
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_PATROLBOAT;
     }
 };
@@ -119,9 +125,9 @@ public:
         bowRow = row;
         bowColumn = column;
     }
-    bool shootAt (int row, int column) override;
+    bool shootAt (int row, int column);
     bool isSunk() const { return false; }
-    std::string getShipType() const override {
+    std::string getShipType() const {
         return TYPE_EMPTY;
     }
 };

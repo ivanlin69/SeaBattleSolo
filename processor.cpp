@@ -66,6 +66,13 @@ int Processor::gameSetUp() {
     int submarineCount = 3;
     int patrolboatCount = 4;
     
+    std::vector<int> tempShipCounts;
+    tempShipCounts.push_back(carrierCount);
+    tempShipCounts.push_back(battleshipCount);
+    tempShipCounts.push_back(destroyerCount);
+    tempShipCounts.push_back(submarineCount);
+    tempShipCounts.push_back(patrolboatCount);
+    
     std::string userInput;
     // If the mode is set to a custom setup
     if (mode == 1) {
@@ -122,8 +129,14 @@ int Processor::gameSetUp() {
                 std::cout << "Invalid input. Please try again.\n";
                 continue;
             }
+            tempShipCounts.at(0) = carrierCount;
+            tempShipCounts.at(1) = battleshipCount;
+            tempShipCounts.at(2) = destroyerCount;
+            tempShipCounts.at(3) = submarineCount;
+            tempShipCounts.at(4) = patrolboatCount;
+            
             // Check if the input fails or the ship numbers are not allowed
-            bool isAllowed = Ocean::isMaxShipsAllowed(maxRow, maxColumn, {carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
+            bool isAllowed = Ocean::isMaxShipsAllowed(maxRow, maxColumn, tempShipCounts);
             
             if (isAllowed) {
                 break;
@@ -135,10 +148,11 @@ int Processor::gameSetUp() {
         } while (true);
     }
     
-    // std::make_unique is a template function, the type of parameters must
-    //  sometimes be explicitly specified to help the compiler with type deduction
     // Create and initialize the Ocean object with the default/specified dimensions and ship counts
-    ocean = std::make_unique<Ocean>(maxRow, maxColumn, std::vector<int>{carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
+    if(ocean != NULL){
+        delete ocean;
+    }
+    ocean = new Ocean(maxRow, maxColumn, tempShipCounts);
     // Indicates a successful setup
     return 0;
 };

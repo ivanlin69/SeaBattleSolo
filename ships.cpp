@@ -4,6 +4,32 @@
 #include <string>
 #include <vector>
 
+const int Ship::CARRIER_SIZE = 5;
+const int Ship::BATTLESHIP_SIZE = 4;
+const int Ship::DESTROYER_SIZE = 3;
+const int Ship::SUBMARINE_SIZE = 2;
+const int Ship::PATROLBOAT_SIZE = 1;
+
+const std::string Ship::TYPE_CARRIER = "Carrier";
+const std::string Ship::TYPE_BATTLESHIP = "Battleship";
+const std::string Ship::TYPE_DESTROYER = "Destroyer";
+const std::string Ship::TYPE_SUBMARINE = "Submarine";
+const std::string Ship::TYPE_PATROLBOAT = "PatrolBoat";
+const std::string Ship::TYPE_EMPTY = "EmptySea";
+
+// Helper function for initializing the shipSizes
+std::vector<int> Ship::initializingShipSizes() {
+    std::vector<int> tempVec;
+    tempVec.push_back(Ship::CARRIER_SIZE);
+    tempVec.push_back(Ship::BATTLESHIP_SIZE);
+    tempVec.push_back(Ship::DESTROYER_SIZE);
+    tempVec.push_back(Ship::SUBMARINE_SIZE);
+    tempVec.push_back(Ship::PATROLBOAT_SIZE);
+    return tempVec;
+}
+//shipSizes= {Ship::CARRIER_SIZE, Ship::BATTLESHIP_SIZE, Ship::DESTROYER_SIZE, Ship::SUBMARINE_SIZE, Ship::PATROLBOAT_SIZE}
+const std::vector<int> Ship::shipSizes = Ship::initializingShipSizes();
+
 // Initializes a ship with specified length, setting default values for bow position and orientation
 // The ship's hit vector is also initialized(not hit (false) for all segments)
 Ship::Ship(int length)
@@ -14,7 +40,7 @@ Ship::Ship(int length)
 // Checks if the ship is completely sunk
 // If all segments of the 'hit' vector has been hit(marked true), return true
 bool Ship::isSunk() const {
-    return std::all_of(hit.begin(), hit.end(), [](bool h) { return h; });
+    return std::all_of(hit.begin(), hit.end(), IsTrue());
 }
 
 // Checks if a specified position is within the boundaries of the ocean
@@ -78,8 +104,10 @@ void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
     bowHorizontal = horizontal;
     // Place the ship in the ocean, marking each segment
     for (int i = 0; i < getLength(); i++) {
-        ocean.getShip(horizontal ? row : row - i,
-                      horizontal ? column - i : column) = shared_from_this();
+        // Delete the existing ship object to avoid memory leakage
+        delete ocean.getShip(horizontal ? row : row - i, horizontal ? column - i : column);
+        // Assign the new ship to the grid
+        ocean.getShip(horizontal ? row : row - i, horizontal ? column - i : column) = this;
     }
 }
 
