@@ -49,7 +49,7 @@ public:
     void print() const;
     // Print the ocean grid with ships visible (for testing)
     void printWithShips() const;
-    virtual ~Ocean() = default;
+    ~Ocean() = default;
 };
 
 #endif
