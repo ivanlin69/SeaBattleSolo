@@ -189,46 +189,46 @@ void Ocean::putAllshipsRandomly() {
 void Ocean::print() const {
     // print the coordinates for the column
     std::cout << "  ";
-    for (int i = 0; i < maxColumn; i++) {
-        if (i < 10) {
-            std::cout << " " << i << " ";
+    for (size_t col = 0; col < maxColumn; ++col) {
+        if (col < 10) {
+            std::cout << " " << col << " ";
         } else {
-            std::cout << i << " ";
+            std::cout << col << " ";
         }
     }
     std::cout << "\n";
     // use nested for loops to get and prints the ships
     // for the row
-    for (int i = 0; i < maxRow; i++) {
+    for (size_t row = 0; row < maxRow; ++row) {
         // prints the coordinates before printing the ships
-        if (i < 10) {
-            std::cout << " " << i << " ";
+        if (row < 10) {
+            std::cout << " " << row << " ";
         } else {
-            std::cout << i << " ";
+            std::cout << row << " ";
         }
         // for the column
-        for (int j = 0; j < maxColumn; j++) {
+        for (size_t col = 0; col < maxColumn; ++col) {
             // if the ship is sunk, or it's an empty sea got hit before, just print
             // the ship (will be "s" / "-")
-            if (this->ships[i][j]->isSunk() == true ||
-                (this->ships[i][j]->getShipType() == Ship::TYPE_EMPTY &&
-                 this->ships[i][j]->getHit()[0] == true)) {
+            if (this->ships[row][col]->isSunk() == true ||
+                (this->ships[row][col]->getShipType() == Ship::TYPE_EMPTY &&
+                 this->ships[row][col]->getHit()[0] == true)) {
                 // Output the representation of the ship at this position
-                std::cout << *(this->ships[i][j]) << "  ";
+                std::cout << *(this->ships[row][col]) << "  ";
             }
-            
+
             // if the ship isn't sunk
             else {
                 // gets the condition of the ship at the given location
-                int bowRow = this->ships[i][j]->getBowRow();
-                int bowColumn = this->ships[i][j]->getBowColumn();
-                
+                int bowRow = this->ships[row][col]->getBowRow();
+                int bowColumn = this->ships[row][col]->getBowColumn();
+
                 // iterates over the ship's hit array to check if the part is hit or not
-                for (int k = 0; k < this->ships[i][j]->getLength(); k++) {
-                    if (bowRow == i && bowColumn == j) {
+                for (size_t k = 0; k < this->ships[row][col]->getLength(); ++k) {
+                    if (bowRow == row && bowColumn == col) {
                         // if is hit, then print the ship
-                        if (this->ships[i][j]->getHit()[k] == true) {
-                            std::cout << *(this->ships[i][j]) << "  ";
+                        if (this->ships[row][col]->getHit()[k] == true) {
+                            std::cout << *(this->ships[row][col]) << "  ";
                             break;
                         } else {
                             // otherwise, print ". "
@@ -236,7 +236,7 @@ void Ocean::print() const {
                             break;
                         }
                     } else {
-                        if (this->ships[i][j]->isHorizontal()) {
+                        if (this->ships[row][col]->isHorizontal()) {
                             bowColumn--;
                         } else {
                             bowRow--;
@@ -245,7 +245,7 @@ void Ocean::print() const {
                 }
             }
             // If it's the end of the column, prints an empty line
-            if (j == maxColumn - 1) {
+            if (col == maxColumn - 1) {
                 std::cout << "\n";
             }
         }
@@ -257,38 +257,38 @@ void Ocean::printWithShips() const {
     // similar to print() but only shows the locations of the ships
     std::cout << "**The following map is shown for dugging purpose. Need to be removed while production.**\n\n";
     std::cout << "  ";
-    for (int i = 0; i < maxColumn; i++) {
-        if (i < 10) {
-            std::cout << " " << i << " ";
+    for (size_t col = 0; col < maxColumn; col++) {
+        if (col < 10) {
+            std::cout << " " << col << " ";
         } else {
-            std::cout << i << " ";
+            std::cout << col << " ";
         }
     }
     std::cout << "\n";
-    for (int i = 0; i < maxRow; i++) {
+    for (size_t row = 0; row < maxRow; row++) {
         // prints the coordinates before printing the ships
-        if (i < 10) {
-            std::cout << " " << i << " ";
+        if (row < 10) {
+            std::cout << " " << row << " ";
         } else {
-            std::cout << i << " ";
+            std::cout << row << " ";
         }
         // Print a specific marker based on ship type or a blank space for empty sea
-        for (int j = 0; j < maxColumn; j++) {
-            if (this->ships[i][j]->getShipType() == Ship::TYPE_CARRIER) {
+        for (size_t col = 0; col < maxColumn; col++) {
+            if (this->ships[row][col]->getShipType() == Ship::TYPE_CARRIER) {
                 std::cout << "c  ";
-            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_BATTLESHIP) {
+            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_BATTLESHIP) {
                 std::cout << "b  ";
-            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_DESTROYER) {
+            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_DESTROYER) {
                 std::cout << "d  ";
-            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_SUBMARINE) {
+            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_SUBMARINE) {
                 std::cout << "s  ";
-            } else if (this->ships[i][j]->getShipType() == Ship::TYPE_PATROLBOAT) {
+            } else if (this->ships[row][col]->getShipType() == Ship::TYPE_PATROLBOAT) {
                 std::cout << "p  ";
             } else {
                 std::cout << "   ";
             }
             // If it's the end of the column, prints an empty line
-            if (j == maxColumn - 1) {
+            if (col == maxColumn - 1) {
                 std::cout << "\n";
             }
         }
