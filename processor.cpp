@@ -152,7 +152,7 @@ void Processor::gameProcessing() {
     std::cout << "\n";
     
     // Debugging: print the ocean with ships visible (need to be comment out for production)
-    ocean->printWithShips();
+    // ocean->printWithShips();
     
     while (true) {
         
