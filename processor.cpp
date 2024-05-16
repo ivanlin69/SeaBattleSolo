@@ -45,7 +45,7 @@ int Processor::modeSelection() {
         } else if (userInput == "0") {
             std::cout << "You choose the Standard Mode ...\n\n";
         } else if (userInput == "1") {
-            mode = 1;
+            mode = true;
             std::cout << "You choose the Custom Mode ... \n\n";
         } else {
             std::cout << "Invalid input. Please try again.\n\n";
@@ -59,7 +59,7 @@ int Processor::modeSelection() {
 int Processor::gameSetUp() {
     // Default values for Standard Mode
     int maxRow = 10;
-    int maxColumn = 10;
+    int maxCol = 10;
     int carrierCount = 1;
     int battleshipCount = 1;
     int destroyerCount = 2;
@@ -67,8 +67,8 @@ int Processor::gameSetUp() {
     int patrolboatCount = 4;
     
     std::string userInput;
-    // If the mode is set to a custom setup
-    if (mode == 1) {
+    // If the mode is set to a custom setup(true)
+    if (mode) {
         // Collect custom dimensions from the user
         do {
             std::cout << "\nPlease enter the maximum size of the map - (Row, Column)\n" << "(Two numbers separated by a comma (e.g., 6,8).): \n";
@@ -84,7 +84,7 @@ int Processor::gameSetUp() {
             
             char delimiter;
             std::stringstream stringStream(userInput);
-            stringStream >> maxRow >> delimiter >> maxColumn;
+            stringStream >> maxRow >> delimiter >> maxCol;
             
             if (stringStream.fail()) {
                 std::cout << "Invalid input. Please try again.\n";
@@ -92,8 +92,7 @@ int Processor::gameSetUp() {
             }
             
             if (maxRow >= Ocean::SUGGESTED_MAXGRIDSIZE ||
-                maxColumn >= Ocean::SUGGESTED_MAXGRIDSIZE || maxRow < 0 ||
-                maxColumn < 0) {
+                maxCol >= Ocean::SUGGESTED_MAXGRIDSIZE || maxRow < 0 || maxCol < 0) {
                 std::cout << "\nThe specified row or column is outside the valid "
                 "range. Please try again.\n";
                 continue;
@@ -123,7 +122,7 @@ int Processor::gameSetUp() {
                 continue;
             }
             // Check if the input fails or the ship numbers are not allowed
-            bool isAllowed = Ocean::isMaxShipsAllowed(maxRow, maxColumn, {carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
+            bool isAllowed = Ocean::isMaxShipsAllowed(maxRow, maxCol, {carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
             
             if (isAllowed) {
                 break;
@@ -138,7 +137,7 @@ int Processor::gameSetUp() {
     // std::make_unique is a template function, the type of parameters must
     //  sometimes be explicitly specified to help the compiler with type deduction
     // Create and initialize the Ocean object with the default/specified dimensions and ship counts
-    ocean = std::make_unique<Ocean>(maxRow, maxColumn, std::vector<int>{carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
+    ocean = std::make_unique<Ocean>(maxRow, maxCol, std::vector<int>{carrierCount, battleshipCount, destroyerCount, submarineCount, patrolboatCount});
     // Indicates a successful setup
     return 0;
 };
@@ -152,13 +151,13 @@ void Processor::gameProcessing() {
     ocean->print();
     std::cout << "\n";
     
-    // Debugging: print the ocean with ships visible (need to be removed in production)
+    // Debugging: print the ocean with ships visible (need to be comment out for production)
     ocean->printWithShips();
     
     while (true) {
         
         int targetRow;
-        int targetColumn;
+        int targetCol;
         bool effectiveShot;
         
         // Get and validate user input for shooting coordinates
@@ -177,7 +176,7 @@ void Processor::gameProcessing() {
             
             char delimiter;
             std::stringstream stringStream(userInput);
-            stringStream >> targetRow >> delimiter >> targetColumn;
+            stringStream >> targetRow >> delimiter >> targetCol;
             
             if (stringStream.fail()) {
                 std::cout << "Invalid input. Please try again.\n";
@@ -185,28 +184,24 @@ void Processor::gameProcessing() {
             }
             
             if (targetRow >= ocean->getMaxColumn() ||
-                targetColumn >= ocean->getMaxColumn() || targetRow < 0 ||
-                targetColumn < 0) {
-                std::cout
-                << "\nThe specified row or column is outside the valid range. "
+                targetCol >= ocean->getMaxColumn() || targetRow < 0 || targetCol < 0) {
+                std::cout << "\nThe specified row or column is outside the valid range. "
                 "Please try again.\n";
                 continue;
             }
             break;
         } while (true);
         // Attempt to shoot at the given location
-        effectiveShot = ocean->shootAt(targetRow, targetColumn);
+        effectiveShot = ocean->shootAt(targetRow, targetCol);
         
         if (effectiveShot) {
             std::cout << "\nFired! You hit a ship!\n";
-            if (ocean->getShip(targetRow, targetColumn)->isSunk()) {
+            if (ocean->getShip(targetRow, targetCol)->isSunk()) {
                 std::cout << "You just sank a ship - "
-                << ocean->getShip(targetRow, targetColumn)->getShipType()
+                << ocean->getShip(targetRow, targetCol)->getShipType()
                 << ". \n";
             }
-        }
-        
-        else {
+        } else {
             std::cout << "\nYou missed a shot.\n";
         }
         // Update and display the ocean's state

@@ -22,26 +22,24 @@ private:
     // Max number of each type of ship allowed
     std::vector<int> maxShipsCount;
     // Helper function to determine if a cell is occupied by a ship
-    bool isOccupied(int row, int column) const;
+    bool isOccupied(int row, int col) const;
     
 public:
     static constexpr int SUGGESTED_MAXGRIDSIZE = 20;
     // Determine if the maximum number of ships have been placed
-    static bool isMaxShipsAllowed(int row, int column, std::vector<int> shipsCount);
+    static bool isMaxShipsAllowed(int row, int col, std::vector<int> shipsCount);
     // Constructor to initialize the ocean grid with specific dimensions and ship counts
-    Ocean(int row, int column, std::vector<int> shipsCount);
+    Ocean(int row, int col, std::vector<int> shipsCount);
     
     int getMaxRow() const { return maxRow; }
     int getMaxColumn() const { return maxColumn; }
     int getFiredShots() const { return firedShots; }
     // Returns the minimum number of hits needed to sink all ships (for game evaluation)
     int getMinHitCounts() const;
-    std::shared_ptr<Ship> &getShip(int row, int column) {
-        return ships[row][column];
-    }
+    std::shared_ptr<Ship> &getShip(int row, int col) { return ships[row][col]; }
     bool isGameOver() const;
     // Processes a shot at a given position, returning true if a ship is hit
-    bool shootAt(int row, int column);
+    bool shootAt(int row, int col);
     void putShipRandomly(std::shared_ptr<Ship> shipPtr);
     // Places a ship randomly on the grid, used during game setup
     void putAllshipsRandomly();
@@ -49,7 +47,7 @@ public:
     void print() const;
     // Print the ocean grid with ships visible (for testing)
     void printWithShips() const;
-    virtual ~Ocean() = default;
+    ~Ocean() = default;
 };
 
 #endif

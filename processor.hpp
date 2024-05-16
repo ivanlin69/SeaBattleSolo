@@ -9,8 +9,8 @@ class Processor {
     
 private:
     std::unique_ptr<Ocean> ocean;
-    // Represents the current game mode(0: Standard Mode; 1: Custom Mode)
-    int mode;
+    // Represents the current game mode(0(false): Standard Mode; 1(true): Custom Mode)
+    bool mode;
     
 public:
     // Default constructor, initializes the game mode to 0
@@ -25,6 +25,7 @@ public:
     void gameProcessing();
     // Displays the ending message based on the outcome of the game
     void endMessage();
+    ~Processor() = default;
 };
 
 #endif

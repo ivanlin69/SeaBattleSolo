@@ -46,18 +46,17 @@ public:
     const std::vector<bool> &getHit() const { return hit; }
     
     // Pure virtual, no implementation in the base class
-    // Must be overridden by all derived classes (unless a derived class is also
-    // abstract)
+    // Must be overridden by all derived classes (unless a derived class is also abstract)
     virtual std::string getShipType() const = 0;
     
     // Methods to manage ship status and placement.
     bool isSunk() const;
     bool isHorizontal() const { return bowHorizontal; }
-    bool isValidSpot(int row, int column, Ocean &ocean) const;
-    bool isAdjacentEmpty(int row, int column, Ocean &ocean) const;
-    bool okToPlaceShipAt(int row, int column, bool horizontal, Ocean &ocean) const;
-    void placeShipAt(int row, int column, bool horizontal, Ocean &ocean);
-    virtual bool shootAt(int row, int column);
+    bool isValidSpot(int row, int col, Ocean &ocean) const;
+    bool isAdjacentEmpty(int row, int col, Ocean &ocean) const;
+    bool okToPlaceShipAt(int row, int col, bool horizontal, Ocean &ocean) const;
+    void placeShipAt(int row, int col, bool horizontal, Ocean &ocean);
+    virtual bool shootAt(int row, int col);
     // Overloading the stream insertion operator for easy display
     friend std::ostream& operator<<(std::ostream &os, const Ship &ship);
     
@@ -115,11 +114,11 @@ public:
 class EmptySea : public Ship {
     
 public:
-    EmptySea(int row, int column) : Ship(1) {
+    EmptySea(int row, int col) : Ship(1) {
         bowRow = row;
-        bowColumn = column;
+        bowColumn = col;
     }
-    bool shootAt (int row, int column) override;
+    bool shootAt (int row, int col) override;
     bool isSunk() const { return false; }
     std::string getShipType() const override {
         return TYPE_EMPTY;

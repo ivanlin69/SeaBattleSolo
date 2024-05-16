@@ -19,9 +19,9 @@ bool Ship::isSunk() const {
 
 // Checks if a specified position is within the boundaries of the ocean
 // Returns false if outside the bounds; otherwise, returns true
-bool Ship::isValidSpot(int row, int column, Ocean &ocean) const {
-    return !(row < 0 || column < 0 || row > ocean.getMaxRow() - 1 ||
-             column > ocean.getMaxColumn() - 1);
+bool Ship::isValidSpot(int row, int col, Ocean &ocean) const {
+    return !(row < 0 || col < 0 || row > ocean.getMaxRow() - 1 ||
+             col > ocean.getMaxColumn() - 1);
 }
 
 /**
@@ -29,18 +29,18 @@ bool Ship::isValidSpot(int row, int column, Ocean &ocean) const {
  This method ensures that no other ships are placed adjacent (diagonally, horizontally, or vertically) to the given position
  Returns true if all adjacent cells are empty; otherwise, returns false
  */
-bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
+bool Ship::isAdjacentEmpty(int row, int col, Ocean &ocean) const {
     // Check all adjacent cells (8 directions)
     for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
         for (int colOffset = -1; colOffset <= 1; colOffset++) {
             int curRow = row + rowOffset;
-            int curColumn = column + colOffset;
+            int curCol = col + colOffset;
             
             // Skip the check for the original position or out-of-bound spots
-            if ((rowOffset == 0 && colOffset == 0) || !(isValidSpot(curRow, curColumn, ocean)))
+            if ((rowOffset == 0 && colOffset == 0) || !(isValidSpot(curRow, curCol, ocean)))
                 continue;
             // If any adjacent cell contains a part of a ship, return false
-            if (ocean.getShip(curRow, curColumn)->getShipType() != Ship::TYPE_EMPTY) {
+            if (ocean.getShip(curRow, curCol)->getShipType() != Ship::TYPE_EMPTY) {
                 return false;
             }
         }
@@ -52,17 +52,17 @@ bool Ship::isAdjacentEmpty(int row, int column, Ocean &ocean) const {
  Validates if a ship can be placed at the specified position with the given orientation.
  Returns true if the ship can be placed; otherwise, returns false.
  */
-bool Ship::okToPlaceShipAt(int row, int column, bool horizontal, Ocean &ocean) const {
+bool Ship::okToPlaceShipAt(int row, int col, bool horizontal, Ocean &ocean) const {
     
-    for (int i = 0; i < getLength(); ++i) {
-        int curRow = horizontal ? row : (row - i);
-        int curColumn = horizontal ? (column - i) : column;
+    for (int l = 0; l < getLength(); l++) {
+        int curRow = horizontal ? row : (row - l);
+        int curCol = horizontal ? (col - l) : col;
         // Check if the current segment's position is valid and empty
-        if (!(isValidSpot(curRow, curColumn, ocean)) ||
-            ocean.getShip(curRow, curColumn)->getShipType() != Ship::TYPE_EMPTY)
+        if (!(isValidSpot(curRow, curCol, ocean)) ||
+            ocean.getShip(curRow, curCol)->getShipType() != Ship::TYPE_EMPTY)
             return false;
         // Ensure no adjacent cells have ships
-        if (!isAdjacentEmpty(curRow, curColumn, ocean))
+        if (!isAdjacentEmpty(curRow, curCol, ocean))
             return false;
     }
     return true;
@@ -72,14 +72,14 @@ bool Ship::okToPlaceShipAt(int row, int column, bool horizontal, Ocean &ocean) c
  Places the ship at the specified position within the ocean grid
  This method updates the ship's position and orientation, then marks the ship's presence in the ocean grid
  */
-void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
+void Ship::placeShipAt(int row, int col, bool horizontal, Ocean &ocean) {
     bowRow = row;
-    bowColumn = column;
+    bowColumn = col;
     bowHorizontal = horizontal;
     // Place the ship in the ocean, marking each segment
-    for (int i = 0; i < getLength(); i++) {
-        ocean.getShip(horizontal ? row : row - i,
-                      horizontal ? column - i : column) = shared_from_this();
+    for (int l = 0; l < getLength(); ++l) {
+        ocean.getShip(horizontal ? row : row - l,
+                      horizontal ? col - l : col) = shared_from_this();
     }
 }
 
@@ -87,7 +87,7 @@ void Ship::placeShipAt(int row, int column, bool horizontal, Ocean &ocean) {
  Attempts to shoot at a specified position(a ship cannot be shot at if it is already sunk)
  Returns true if the shot hits any part of the ship, otherwise false.
  */
-bool Ship::shootAt(int row, int column) {
+bool Ship::shootAt(int row, int col) {
     
     if (isSunk()) {
         return false;
@@ -97,7 +97,7 @@ bool Ship::shootAt(int row, int column) {
     int curCol = bowColumn;
     // Check each segment of the ship to see if it matches the targeted position
     for (int i = 0; i < length; i++) {
-        if (curRow == row && curCol == column) {
+        if (curRow == row && curCol == col) {
             hit[i] = true;
             return true;
         }
@@ -125,8 +125,8 @@ std::ostream &operator<<(std::ostream &os, const Ship &ship) {
  Overrides for EmptySea class
  It should always return false as the EmptySea cannot be "hit"
  */
-bool EmptySea::shootAt(int row, int column) {
-    if (bowRow == row && bowColumn == column) {
+bool EmptySea::shootAt(int row, int col) {
+    if (bowRow == row && bowColumn == col) {
         hit[0] = true;
     }
     return false;
