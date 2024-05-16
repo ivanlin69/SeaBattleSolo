@@ -1,7 +1,7 @@
 # Sea Battle Solo
 
 ## Description
-This project is a classic Sea Battle game implemented in C++. This version of the game is designed to be played on the command line and offers both a standard and a customizable game mode.
+This project is a classic Sea Battle game implemented in `C++`. This version of the game is designed to be played on the command line and offers both a standard and a customizable game mode.
 
 ## Features
 - **Customizable Grid Size**: Players can set the size of the game board.
@@ -46,7 +46,7 @@ In customizable mode, players can set the grid size and choose the number and ty
 
 ### Prerequisites
 
-- A modern C++ compiler that supports C++17 (e.g., GCC, Clang)
+- A modern C++ compiler that supports `C++17` (e.g., GCC, Clang)
 - CMake for building the project (optional)
 
 ### Installation
