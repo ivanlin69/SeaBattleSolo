@@ -47,7 +47,7 @@ In customizable mode, players can set the grid size and choose the number and ty
 ### Prerequisites
 
 - A modern C++ compiler that supports `C++17` (e.g., GCC, Clang)
-- CMake for building the project (optional)
+- CMake for building the project
 
 ### Installation
 
@@ -59,11 +59,11 @@ In customizable mode, players can set the grid size and choose the number and ty
    ```
 2. **Compile the Game** (make sure you have a C++ compiler installed):
    ```bash
-   clang++ -o SeaBattleSolo main.cpp processor.cpp ocean.cpp ships.cpp -std=c++17
+   make default
    ```
 3. **Run the game**
    ```bash
-   ./SeaBattleSolo
+   make
    ```
    
 ## How to Play
